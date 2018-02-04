@@ -6,7 +6,7 @@ OBJS=gflops-test.o gflops.o
 TARGET=gflops
 
 all: $(OBJS)
-	$(CC) $(LDFLAGS) $(OBJS) -o $(TARGET)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
