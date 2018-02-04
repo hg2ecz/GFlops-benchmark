@@ -10,7 +10,7 @@ float gtest_float(float *fvec, int len) {
 
 float gtest_float4(float *fvec, int len) {
     float res[4] = {0, 0, 0, 0};
-    for (int i=0; i<len; i+=4) {
+    for (int i=0; i<=len-4; i+=4) {
 	res[0]+=fvec[i];
 	res[1]+=fvec[i+1];
 	res[2]+=fvec[i+2];
@@ -25,7 +25,7 @@ float gtest_float16(float *fvec, int len) {
     float res2[4] = {0, 0, 0, 0};
     float res3[4] = {0, 0, 0, 0};
 
-    for (int i=0; i<len; i+=16) {
+    for (int i=0; i<=len-16; i+=16) {
 	res0[0]+=fvec[i+0];
 	res0[1]+=fvec[i+1];
 	res0[2]+=fvec[i+2];
@@ -60,7 +60,7 @@ float gtest_float32(float *fvec, int len) {
     float res6[4] = {0, 0, 0, 0};
     float res7[4] = {0, 0, 0, 0};
 
-    for (int i=0; i<len; i+=32) {
+    for (int i=0; i<=len-32; i+=32) {
 	res0[0]+=fvec[i+0];
 	res0[1]+=fvec[i+1];
 	res0[2]+=fvec[i+2];
