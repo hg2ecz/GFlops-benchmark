@@ -54,6 +54,21 @@ void gfloat16() {
     }
 }
 
+void gfloat32() {
+    int nthreads, tid;
+    #pragma omp parallel private (nthreads, tid)
+    {
+	nthreads = omp_get_num_threads(); // number of all thread
+	tid = omp_get_thread_num(); // thread id
+	if (tid == 0) printf("Number of threads = %d\n", nthreads);
+	const int thread_veclen = FVECLEN/nthreads;
+
+	for (int i=0; i<REPEAT; i++) {
+	    gtest_float32(&fvec[tid*thread_veclen], thread_veclen);
+	}
+    }
+}
+
 void gfloat32x4() {
     int nthreads, tid;
     #pragma omp parallel private (nthreads, tid)
@@ -91,6 +106,10 @@ int main() {
     gettimeofday(&tstart, NULL); gfloat16(); gettimeofday(&tend, NULL);
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
     printf("Float16 --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
+
+    gettimeofday(&tstart, NULL); gfloat32(); gettimeofday(&tend, NULL);
+    eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
+    printf("Float32 --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
 
     gettimeofday(&tstart, NULL); gfloat32x4(); gettimeofday(&tend, NULL);
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
