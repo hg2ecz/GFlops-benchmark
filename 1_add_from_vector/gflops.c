@@ -4,7 +4,7 @@
 #include "gflops-test.h"
 
 #define REPEAT (1000*1000)
-#define FVECLEN 4000
+#define FVECLEN 4096
 
 float fvec[FVECLEN];
 float32x4_t fvec32x4[FVECLEN/4];
