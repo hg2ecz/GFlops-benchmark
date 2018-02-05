@@ -7,7 +7,7 @@
 #define FVECLEN 4096
 
 float fvec[FVECLEN];
-float32x4_t fvec32x4[FVECLEN/4];
+VECTYPE fvec32x4[FVECLEN/4];
 
 void gfloat() {
     int nthreads, tid;
@@ -69,7 +69,7 @@ void gfloat32() {
     }
 }
 
-void gfloat32x4() {
+void gfloat_vec() {
     int nthreads, tid;
     #pragma omp parallel private (nthreads, tid)
     {
@@ -79,15 +79,15 @@ void gfloat32x4() {
 	const int thread_veclen = FVECLEN/4/nthreads;
 
 	for (int i=0; i<REPEAT; i++) {
-	    gtest_float32x4(&fvec32x4[tid*thread_veclen], thread_veclen);
+	    gtest_float_vec(&fvec32x4[tid*thread_veclen], thread_veclen);
 	}
     }
 }
 
-void gfloat32x4_1thread() {
+void gfloat_vec_1thread() {
     printf("Number of threads = 1\n");
     for (int i=0; i<REPEAT; i++) {
-	gtest_float32x4(fvec32x4, FVECLEN/4);
+	gtest_float_vec(fvec32x4, FVECLEN/4);
     }
 }
 
@@ -111,11 +111,11 @@ int main() {
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
     printf("Float32 --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
 
-    gettimeofday(&tstart, NULL); gfloat32x4(); gettimeofday(&tend, NULL);
+    gettimeofday(&tstart, NULL); gfloat_vec(); gettimeofday(&tend, NULL);
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
     printf("Float32x4 --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
 
-    gettimeofday(&tstart, NULL); gfloat32x4_1thread(); gettimeofday(&tend, NULL);
+    gettimeofday(&tstart, NULL); gfloat_vec_1thread(); gettimeofday(&tend, NULL);
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
     printf("Float32x4 1thread --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
 

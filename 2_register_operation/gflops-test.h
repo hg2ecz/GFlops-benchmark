@@ -1,7 +1,3 @@
-#include <arm_neon.h>
-
-#define THREADNUM 4
-
 float gtest_fmla_a(const float *fvec, int len);
 float gtest_fmla_b(const float *fvec, int len);
 float gtest_fmla_c(const float *fvec, int len);

@@ -108,8 +108,8 @@ float gtest_float32(const float *fvec, int len) {
 }
 
 
-float gtest_float32x4(float32x4_t *fvec, int len) {
-    float32x4_t res = {0, 0, 0, 0};
+float gtest_float_vec(VECTYPE *fvec, int len) {
+    VECTYPE res = {0, 0, 0, 0};
     for (int i=0; i<len; i++) {
 	res+=fvec[i];
     }

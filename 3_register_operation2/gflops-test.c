@@ -96,13 +96,13 @@ float gtest_fmla_b(const float *fvec, int len) {
 }
 
 float gtest_fmla_c(const float *fvec, int len) {
-    float32x4_t res = {0, 0, 0, 0};
+    VECTYPE res = {0, 0, 0, 0};
 
     for (int i=0; i<=len-16; i+=16) {
-	float32x4_t r0 = *((const float32x4_t *)&fvec[i+0]);
-	float32x4_t r1 = *((const float32x4_t *)&fvec[i+4]);
-	float32x4_t r2 = *((const float32x4_t *)&fvec[i+8]);
-	float32x4_t r3 = *((const float32x4_t *)&fvec[i+12]);
+	VECTYPE r0 = *((const VECTYPE *)&fvec[i+0]);
+	VECTYPE r1 = *((const VECTYPE *)&fvec[i+4]);
+	VECTYPE r2 = *((const VECTYPE *)&fvec[i+8]);
+	VECTYPE r3 = *((const VECTYPE *)&fvec[i+12]);
 
 	res+=r0*r0;
 	res+=r0*r1;
@@ -122,14 +122,14 @@ float gtest_fmla_c(const float *fvec, int len) {
 }
 
 float gtest_fmla_c2(const float *fvec, int len) {
-    float32x4_t res0 = {0, 0, 0, 0};
-    float32x4_t res1 = {0, 0, 0, 0};
+    VECTYPE res0 = {0, 0, 0, 0};
+    VECTYPE res1 = {0, 0, 0, 0};
 
     for (int i=0; i<=len-16; i+=16) {
-	float32x4_t r0 = *((const float32x4_t *)&fvec[i+0]);
-	float32x4_t r1 = *((const float32x4_t *)&fvec[i+4]);
-	float32x4_t r2 = *((const float32x4_t *)&fvec[i+8]);
-	float32x4_t r3 = *((const float32x4_t *)&fvec[i+12]);
+	VECTYPE r0 = *((const VECTYPE *)&fvec[i+0]);
+	VECTYPE r1 = *((const VECTYPE *)&fvec[i+4]);
+	VECTYPE r2 = *((const VECTYPE *)&fvec[i+8]);
+	VECTYPE r3 = *((const VECTYPE *)&fvec[i+12]);
 
 	res0+=r0*r0;
 	res1+=r0*r1;
