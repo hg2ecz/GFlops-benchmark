@@ -1,6 +1,6 @@
 #include "gflops-test.h"
 
-float gtest_float(float *fvec, int len) {
+float gtest_float(const float *fvec, int len) {
     float res = 0;
     for (int i=0; i<len; i++) {
 	res+=fvec[i];
@@ -8,7 +8,7 @@ float gtest_float(float *fvec, int len) {
     return res;
 }
 
-float gtest_float4(float *fvec, int len) {
+float gtest_float4(const float *fvec, int len) {
     float res[4] = {0, 0, 0, 0};
     for (int i=0; i<=len-4; i+=4) {
 	res[0]+=fvec[i];
@@ -19,7 +19,7 @@ float gtest_float4(float *fvec, int len) {
     return res[0]+res[1]+res[2]+res[3];
 }
 
-float gtest_float16(float *fvec, int len) {
+float gtest_float16(const float *fvec, int len) {
     float res0[4] = {0, 0, 0, 0};
     float res1[4] = {0, 0, 0, 0};
     float res2[4] = {0, 0, 0, 0};
@@ -50,7 +50,7 @@ float gtest_float16(float *fvec, int len) {
 	   res2[0]+res2[1]+res2[2]+res2[3] + res3[0]+res3[1]+res3[2]+res3[3];
 }
 
-float gtest_float32(float *fvec, int len) {
+float gtest_float32(const float *fvec, int len) {
     float res0[4] = {0, 0, 0, 0};
     float res1[4] = {0, 0, 0, 0};
     float res2[4] = {0, 0, 0, 0};
