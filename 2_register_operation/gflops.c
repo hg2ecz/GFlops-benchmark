@@ -28,7 +28,7 @@ void gtest(float (*testfunc)(const float *, int), char *testname) {
 
     gettimeofday(&tend, NULL);
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
-    printf("%s --> eltime: %3.6f ms, GFlops: %3.6f\n\n", testname, eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
+    printf("%s --> eltime: %3.6f ms, GFlops: %3.6f\n\n", testname, eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000. *4);
 }
 
 
