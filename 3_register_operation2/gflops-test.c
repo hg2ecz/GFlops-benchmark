@@ -95,7 +95,7 @@ float gtest_fmla_b(const float *fvec, int len) {
     return res[0]+res[1]+res[2]+res[3];
 }
 
-float gtest_fmla_c(const float *fvec, int len) {
+float gtest_fmla_vec(const float *fvec, int len) {
     VECTYPE res = {0, 0, 0, 0};
 
     for (int i=0; i<=len-16; i+=16) {
@@ -121,7 +121,7 @@ float gtest_fmla_c(const float *fvec, int len) {
     return res[0]+res[1]+res[2]+res[3];
 }
 
-float gtest_fmla_c2(const float *fvec, int len) {
+float gtest_fmla_doublevec(const float *fvec, int len) {
     VECTYPE res0 = {0, 0, 0, 0};
     VECTYPE res1 = {0, 0, 0, 0};
 
@@ -148,3 +148,64 @@ float gtest_fmla_c2(const float *fvec, int len) {
     res0+=res1;
     return res0[0]+res0[1]+res0[2]+res0[3];
 }
+
+#if defined (__AVX__)
+float gtest_fmla_avx(const float *fvec, int len) {
+    __v8sf res0 = {0, 0, 0, 0, 0, 0, 0, 0};
+    __v8sf res1 = {0, 0, 0, 0, 0, 0, 0, 0};
+
+    for (int i=0; i<=len-32; i+=32) {
+	__v8sf r0 = *((const __v8sf *)&fvec[i+0]);
+	__v8sf r1 = *((const __v8sf *)&fvec[i+8]);
+	__v8sf r2 = *((const __v8sf *)&fvec[i+16]);
+	__v8sf r3 = *((const __v8sf *)&fvec[i+32]);
+
+	res0+=r0*r0;
+	res1+=r0*r1;
+	res0+=r0*r2;
+	res1+=r0*r3;
+
+	res0+=r1*r1;
+	res1+=r1*r2;
+	res0+=r1*r3;
+
+	res1+=r2*r2;
+	res0+=r2*r3;
+
+	res1+=r3*r3;
+    }
+    res0+=res1;
+    return res0[0]+res0[1]+res0[2]+res0[3]+res0[4]+res0[5]+res0[6]+res0[7];
+}
+#endif
+
+#if defined (__AVX512F__)
+float gtest_fmla_avx512f(const float *fvec, int len) {
+    __v16sf res0 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    __v16sf res1 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    for (int i=0; i<=len-32; i+=64) {
+	__v16sf r0 = *((const __v16sf *)&fvec[i+0]);
+	__v16sf r1 = *((const __v16sf *)&fvec[i+16]);
+	__v16sf r2 = *((const __v16sf *)&fvec[i+32]);
+	__v16sf r3 = *((const __v16sf *)&fvec[i+48]);
+
+	res0+=r0*r0;
+	res1+=r0*r1;
+	res0+=r0*r2;
+	res1+=r0*r3;
+
+	res0+=r1*r1;
+	res1+=r1*r2;
+	res0+=r1*r3;
+
+	res1+=r2*r2;
+	res0+=r2*r3;
+
+	res1+=r3*r3;
+    }
+    res0+=res1;
+    return res0[0]+res0[1]+res0[2]+res0[3]+res0[4]+res0[5]+res0[6]+res0[7]+
+	   res0[8]+res0[9]+res0[10]+res0[11]+res0[12]+res0[13]+res0[14]+res0[15];
+}
+#endif

@@ -8,85 +8,34 @@
 
 float fvec[FVECLEN];
 
-void gfmla_a() {
-    int nthreads, tid;
-    #pragma omp parallel private (nthreads, tid)
-    {
-	nthreads = omp_get_num_threads(); // number of all thread
-	tid = omp_get_thread_num(); // thread id
-	if (tid == 0) printf("Number of threads = %d\n", nthreads);
-	const int thread_veclen = FVECLEN/nthreads;
-
-	for (int i=0; i<REPEAT; i++) {
-	    gtest_fmla_a(&fvec[tid*thread_veclen], thread_veclen);
-	}
-    }
-}
-
-void gfmla_b() {
-    int nthreads, tid;
-    #pragma omp parallel private (nthreads, tid)
-    {
-	nthreads = omp_get_num_threads(); // number of all thread
-	tid = omp_get_thread_num(); // thread id
-	if (tid == 0) printf("Number of threads = %d\n", nthreads);
-	const int thread_veclen = FVECLEN/nthreads;
-
-	for (int i=0; i<REPEAT; i++) {
-	    gtest_fmla_b(&fvec[tid*thread_veclen], thread_veclen);
-	}
-    }
-}
-
-void gfmla_c() {
-    int nthreads, tid;
-    #pragma omp parallel private (nthreads, tid)
-    {
-	nthreads = omp_get_num_threads(); // number of all thread
-	tid = omp_get_thread_num(); // thread id
-	if (tid == 0) printf("Number of threads = %d\n", nthreads);
-	const int thread_veclen = FVECLEN/nthreads;
-
-	for (int i=0; i<REPEAT; i++) {
-	    gtest_fmla_c(&fvec[tid*thread_veclen], thread_veclen);
-	}
-    }
-}
-
-void gfmla_c2() {
-    int nthreads, tid;
-    #pragma omp parallel private (nthreads, tid)
-    {
-	nthreads = omp_get_num_threads(); // number of all thread
-	tid = omp_get_thread_num(); // thread id
-	if (tid == 0) printf("Number of threads = %d\n", nthreads);
-	const int thread_veclen = FVECLEN/nthreads;
-
-	for (int i=0; i<REPEAT; i++) {
-	    gtest_fmla_c2(&fvec[tid*thread_veclen], thread_veclen);
-	}
-    }
-}
-
-int main() {
+void gtest(float (*testfunc)(const float *, int), char *testname) {
     struct timeval tstart, tend;
     double eltime_ms;
+    gettimeofday(&tstart, NULL);
 
-    gettimeofday(&tstart, NULL); gfmla_a(); gettimeofday(&tend, NULL);
+    int nthreads, tid;
+    #pragma omp parallel private (nthreads, tid)
+    {
+	nthreads = omp_get_num_threads(); // number of all thread
+	tid = omp_get_thread_num(); // thread id
+	if (tid == 0) printf("Number of threads = %d\n", nthreads);
+	const int thread_veclen = FVECLEN/nthreads;
+
+	for (int i=0; i<REPEAT; i++) {
+	    (*testfunc)(&fvec[tid*thread_veclen], thread_veclen);
+	}
+    }
+
+    gettimeofday(&tend, NULL);
     eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
-    printf("Fmla_a --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.*4);
+    printf("%s --> eltime: %3.6f ms, GFlops: %3.6f\n\n", testname, eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.);
+}
 
-    gettimeofday(&tstart, NULL); gfmla_b(); gettimeofday(&tend, NULL);
-    eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
-    printf("Fmla_b --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.*4);
 
-    gettimeofday(&tstart, NULL); gfmla_c(); gettimeofday(&tend, NULL);
-    eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
-    printf("Fmla_c --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.*4);
-
-    gettimeofday(&tstart, NULL); gfmla_c2(); gettimeofday(&tend, NULL);
-    eltime_ms = 1000.*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec)/1000.;
-    printf("Fmla_c2 --> eltime: %3.6f ms, GFlops: %3.6f\n\n", eltime_ms, (double)REPEAT*FVECLEN/eltime_ms/1000./1000.*4);
-
+int main() {
+    gtest(gtest_fmla_a, "Fmla_a");
+    gtest(gtest_fmla_b, "Fmla_b");
+    gtest(gtest_fmla_c, "Fmla_c");
+    gtest(gtest_fmla_c2, "Fmla_c2");
     return 0;
 }

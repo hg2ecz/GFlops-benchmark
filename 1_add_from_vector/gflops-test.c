@@ -108,10 +108,12 @@ float gtest_float32(const float *fvec, int len) {
 }
 
 
-float gtest_float_vec(VECTYPE *fvec, int len) {
+float gtest_float_vec(const float *fvec, int len) {
+    const VECTYPE *fvec_vtype = (const VECTYPE *)fvec;
+
     VECTYPE res = {0, 0, 0, 0};
-    for (int i=0; i<len; i++) {
-	res+=fvec[i];
+    for (int i=0; i<len/4; i++) {
+	res+=fvec_vtype[i];
     }
     return res[0]+res[1]+res[2]+res[3];
 }

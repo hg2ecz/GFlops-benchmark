@@ -10,4 +10,4 @@ float gtest_float(const float *fvec, int len);
 float gtest_float4(const float *fvec, int len);
 float gtest_float16(const float *fvec, int len);
 float gtest_float32(const float *fvec, int len);
-float gtest_float_vec(VECTYPE *fvec, int len);
+float gtest_float_vec(const float *fvec, int len);
