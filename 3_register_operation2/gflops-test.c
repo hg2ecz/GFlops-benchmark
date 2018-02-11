@@ -1,5 +1,13 @@
 #include "gflops-test.h"
 
+#if defined(__arm__) || defined(__aarch64__)
+  #include <arm_neon.h>
+  typedef float32x4_t VECTYPE;
+#elif defined (__SSE__)
+  #include <smmintrin.h>
+  typedef __v4sf VECTYPE;
+#endif
+
 float gtest_fmla_a(const float *fvec, int len) {
     float res = 0;
     for (int i=0; i<=len-16; i+=16) {
@@ -150,6 +158,7 @@ float gtest_fmla_doublevec(const float *fvec, int len) {
 }
 
 #if defined (__AVX__)
+#include <immintrin.h>
 float gtest_fmla_avx(const float *fvec, int len) {
     __v8sf res = {0, 0, 0, 0, 0, 0, 0, 0};
 

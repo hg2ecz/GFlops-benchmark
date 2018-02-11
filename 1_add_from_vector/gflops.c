@@ -7,7 +7,6 @@
 #define FVECLEN 4096
 
 float fvec[FVECLEN];
-VECTYPE fvec32x4[FVECLEN/4];
 
 void gtest(float (*testfunc)(const float *, int), char *testname) {
     struct timeval tstart, tend;
@@ -37,6 +36,12 @@ int main() {
     gtest(gtest_float4, "Float4");
     gtest(gtest_float16, "Float16");
     gtest(gtest_float32, "Float32");
-    gtest(gtest_float_vec, "Float32x4");
+    gtest(gtest_float_vec, "NEON/SSE");
+#if defined(__AVX__)
+    gtest(gtest_float_avx, "AVX");
+#endif
+#if defined(__AVX512F__)
+    gtest(gtest_float_avx512f, "AVX512");
+#endif
     return 0;
 }

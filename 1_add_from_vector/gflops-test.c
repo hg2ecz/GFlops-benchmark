@@ -1,5 +1,13 @@
 #include "gflops-test.h"
 
+#if defined(__arm__) || defined(__aarch64__)
+  #include <arm_neon.h>
+  typedef float32x4_t VECTYPE;
+#else
+  #include <smmintrin.h>
+  typedef __v4sf VECTYPE;
+#endif
+
 float gtest_float(const float *fvec, int len) {
     float res = 0;
     for (int i=0; i<len; i++) {
@@ -117,3 +125,29 @@ float gtest_float_vec(const float *fvec, int len) {
     }
     return res[0]+res[1]+res[2]+res[3];
 }
+
+#if defined (__AVX__)
+#include <immintrin.h>
+float gtest_float_avx(const float *fvec, int len) {
+    const __v8sf *fvec_vtype = (const __v8sf *)fvec;
+
+    __v8sf res = {0, 0, 0, 0, 0, 0, 0, 0};
+    for (int i=0; i<len/8; i++) {
+	res+=fvec_vtype[i];
+    }
+    return res[0]+res[1]+res[2]+res[3]+res[4]+res[5]+res[6]+res[7];
+}
+#endif
+
+#if defined (__AVX512F__)
+float gtest_float_avx512f(const float *fvec, int len) {
+    const __v16sf *fvec_vtype = (const __v16sf *)fvec;
+
+    __v16sf res = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    for (int i=0; i<len/16; i++) {
+	res+=fvec_vtype[i];
+    }
+    return res[ 0]+res[ 1]+res[ 2]+res[ 3]+res[ 4]+res[ 5]+res[ 6]+res[ 7]+
+	   res[ 8]+res[ 9]+res[10]+res[11]+res[12]+res[13]+res[14]+res[15];
+}
+#endif
