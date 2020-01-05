@@ -13,4 +13,4 @@ all: $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
 clean:
-	rm -f $(OBJS) rotate.S $(TARGET)
+	rm -f $(OBJS) rotate.s $(TARGET)
