@@ -6,7 +6,7 @@ void rotate(struct _cf32x4_t *base, const struct _cf32x4_t *phase) {
         for (int k=0; k<4; k++) {
             for (int j=0; j<125; j++) {
                 float32x4_t b_re = *(float32x4_t*)(((float *)&base[i+j].re) + k);
-                float32x4_t b_im = *(float32x4_t*)(((float *)&base[i+j].re) + k);
+                float32x4_t b_im = *(float32x4_t*)(((float *)&base[i+j].im) + k);
                 res.re += b_re * phase[j].re - b_im * phase[j].im;
                 res.im += b_re * phase[j].im + b_im * phase[j].re;
             }
