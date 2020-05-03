@@ -342,32 +342,32 @@ int test6(struct _result *result, const struct _input *input) {
 
 	for (size_t j=0; j<=input->clen-8; j+=8) {
 	    AVXTYPE data;
-	    AVXTYPE coeff = LOADAVX(&input->coeff[j]); // 1 x load coeff
+	    AVXTYPE coeff = LOADAVX_UNALIGNED(&input->coeff[j]); // 1 x load coeff
 
 	    size_t r = i+j;
-	    data = LOADAVX(&input->data_real[r]); res_re0 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im0 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re0 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re1 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im1 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re1 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im1 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re2 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im2 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re2 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im2 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re3 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im3 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re3 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im3 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re4 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im4 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re4 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im4 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re5 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im5 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re5 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im5 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re6 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im6 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re6 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im6 += data * coeff;
 	    //r += decim;
-	    //data = LOADAVX(&input->data_real[r]); res_re7 += data * coeff;
-	    //data = LOADAVX(&input->data_imag[r]); res_im7 += data * coeff;
+	    //data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re7 += data * coeff;
+	    //data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im7 += data * coeff;
 	}
 
 	result->data_real[k]   = res_re0[0] + res_re0[1] + res_re0[2] + res_re0[3] + res_re0[4] + res_re0[5] + res_re0[6] + res_re0[7];
@@ -420,32 +420,32 @@ int test7(struct _result *result, const struct _input *input) {
 
 	for (size_t j=0; j<=input->clen-8; j+=8) {
 	    AVXTYPE data;
-	    AVXTYPE coeff = LOADAVX(&input->coeff[j]); // 1 x load coeff
+	    AVXTYPE coeff = LOADAVX_UNALIGNED(&input->coeff[j]); // 1 x load coeff
 
 	    size_t r=i+j;
-	    data = LOADAVX(&input->data_real[r]); res_re0 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im0 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re0 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re1 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im1 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re1 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im1 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re2 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im2 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re2 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im2 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re3 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im3 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re3 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im3 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re4 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im4 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re4 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im4 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re5 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im5 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re5 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im5 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re6 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im6 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re6 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im6 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re7 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im7 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re7 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im7 += data * coeff;
 
 	    r += decim;
 	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re8  += data * coeff;
@@ -460,8 +460,8 @@ int test7(struct _result *result, const struct _input *input) {
 	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re11 += data * coeff;
 	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im11 += data * coeff;
 	    r += decim;
-	    data = LOADAVX(&input->data_real[r]); res_re12 += data * coeff;
-	    data = LOADAVX(&input->data_imag[r]); res_im12 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re12 += data * coeff;
+	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im12 += data * coeff;
 	    r += decim;
 	    data = LOADAVX_UNALIGNED(&input->data_real[r]); res_re13 += data * coeff;
 	    data = LOADAVX_UNALIGNED(&input->data_imag[r]); res_im13 += data * coeff;
