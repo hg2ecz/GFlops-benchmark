@@ -57,27 +57,59 @@ extern "C" {
 
 pub fn test(func: u32, input: &Input) -> Output {
     let mut output = Output {
-        data_real: Vec::with_capacity(input.data_real.len()*2),
-        data_imag: Vec::with_capacity(input.data_imag.len()*4),
+        data_real: Vec::with_capacity(input.data_real.len() * 2),
+        data_imag: Vec::with_capacity(input.data_imag.len() * 4),
     };
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     match func {
-        1 => unsafe { testrust1(&mut output, input); },
-        2 => unsafe { testrust2(&mut output, input); },
-        3 => unsafe { testrust3(&mut output, input); },
-        4 => unsafe { testrust4(&mut output, input); },
-        5 => unsafe { testrust5(&mut output, input); },
+        1 => unsafe {
+            testrust1(&mut output, input);
+        },
+        2 => unsafe {
+            testrust2(&mut output, input);
+        },
+        3 => unsafe {
+            testrust3(&mut output, input);
+        },
+        4 => unsafe {
+            testrust4(&mut output, input);
+        },
+        5 => unsafe {
+            testrust5(&mut output, input);
+        },
         _ => (),
     }
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     match func {
-        1 => unsafe { testrust1(&mut output, input); },
-        2 => unsafe { testrust2(&mut output, input); },
-        3 => unsafe { testrust3(&mut output, input); },
-        4 => unsafe { testrust4(&mut output, input); },
-        5 => unsafe { testrust5(&mut output, input); },
-        6 => if is_x86_feature_detected!("avx") { unsafe { testrust6(&mut output, input); } },
-        7 => if is_x86_feature_detected!("avx") { unsafe { testrust7(&mut output, input); } },
+        1 => unsafe {
+            testrust1(&mut output, input);
+        },
+        2 => unsafe {
+            testrust2(&mut output, input);
+        },
+        3 => unsafe {
+            testrust3(&mut output, input);
+        },
+        4 => unsafe {
+            testrust4(&mut output, input);
+        },
+        5 => unsafe {
+            testrust5(&mut output, input);
+        },
+        6 => {
+            if is_x86_feature_detected!("avx") {
+                unsafe {
+                    testrust6(&mut output, input);
+                }
+            }
+        }
+        7 => {
+            if is_x86_feature_detected!("avx") {
+                unsafe {
+                    testrust7(&mut output, input);
+                }
+            }
+        }
         _ => (),
     }
     output
