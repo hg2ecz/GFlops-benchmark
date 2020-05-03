@@ -6,13 +6,13 @@ struct _input {
     size_t dlen;
     float *coeff;
     size_t clen;
-} __attribute__ ((aligned (32)));
+};
 
 struct _result {
     float *data_real;
     float *data_imag;
     size_t dlen;
-} __attribute__ ((aligned (32)));
+};
 
 void test_init(struct _result *, struct _input *);
 double test_check(const struct _result *);

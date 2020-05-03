@@ -23,14 +23,14 @@ int main() {
     struct _result result __attribute__ ((aligned (32)));
     test_init(&result, &input);
 
-    testfn(test1, &result, &input, "test1");
-    testfn(test2, &result, &input, "test2");
-    testfn(test3, &result, &input, "test3");
-    testfn(test4, &result, &input, "test4");
-    testfn(test5, &result, &input, "test5");
+    testfn(test1, &result, &input, "test1C");
+    testfn(test2, &result, &input, "test2C");
+    testfn(test3, &result, &input, "test3C");
+    testfn(test4, &result, &input, "test4C");
+    testfn(test5, &result, &input, "test5C");
 #if defined (__AVX__)
-    testfn(test6, &result, &input, "t3AVX");
-    testfn(test7, &result, &input, "t4AVX");
+    testfn(test6, &result, &input, "t3AVXC");
+    testfn(test7, &result, &input, "t4AVXC");
 #endif
     puts("");
     return 0;

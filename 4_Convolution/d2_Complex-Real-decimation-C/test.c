@@ -26,11 +26,13 @@ void test_init(struct _result *result, struct _input *input) {
     input->data_imag = malloc(DATALEN*sizeof(float));
     input->coeff = malloc(COEFLEN*sizeof(float));
     input->clen = COEFLEN;
-    for (int i=0; i<input->dlen; i++) {
-	input->data_real[i] = 1.0*sin(2*M_PI/1001*i);
-	input->data_imag[i] = 1.1*sin(2.131*M_PI/1001*i);
+    for (size_t i=0; i<input->dlen; i++) {
+	//input->data_real[i] = 1.0*sinf(2.f*(float)M_PI/1001.f*(float)i);
+	//input->data_imag[i] = 1.1*sinf(2.131f*(float)M_PI/1001.f*(float)i);
+	input->data_real[i] = 1.0*sinf(2.f*(float)M_PI/1001.f*i);
+	input->data_imag[i] = 1.1*sinf(2.131f*(float)M_PI/1001.f*i);
     }
-    for (int i=0; i<input->clen; i++) {
+    for (size_t i=0; i<input->clen; i++) {
 	input->coeff[i] = 0.9+0.1/(i+1.);
     }
     result->data_real = malloc(DATALEN*sizeof(float));
@@ -39,7 +41,7 @@ void test_init(struct _result *result, struct _input *input) {
 
 double test_check(const struct _result *result) {
     double res = 0.;
-    for (int i=0; i<result->dlen; i++) {
+    for (size_t i=0; i<result->dlen; i++) {
 	res += result->data_real[i] + result->data_imag[i];
     }
     return res;
@@ -47,12 +49,12 @@ double test_check(const struct _result *result) {
 
 
 int test1(struct _result *result, const struct _input *input) {
-    int decim=DECIM;
-    int k=0;
-    for (int i=0; i <= input->dlen - input->clen-decim+1; i+=decim) {
+    size_t decim=DECIM;
+    size_t k=0;
+    for (size_t i=0; i <= input->dlen - input->clen-decim+1; i+=decim) {
 	float res_re = 0;
 	float res_im = 0;
-	for (int j=0; j<input->clen; j++) {
+	for (size_t j=0; j<input->clen; j++) {
 	    res_re += input->data_real[i+j] * input->coeff[j];
 	    res_im += input->data_imag[i+j] * input->coeff[j];
 	}
@@ -65,12 +67,12 @@ int test1(struct _result *result, const struct _input *input) {
 }
 
 int test2(struct _result *result, const struct _input *input) {
-    int decim=DECIM;
-    int k=0;
-    for (int i=0; i <= input->dlen - input->clen-decim-4+1; i+=decim) {
+    size_t decim=DECIM;
+    size_t k=0;
+    for (size_t i=0; i <= input->dlen - input->clen-decim-4+1; i+=decim) {
 	VECTYPE res_re = {0., 0., 0., 0.};
 	VECTYPE res_im = {0., 0., 0., 0.};
-	for (int j=0; j <= input->clen-4; j+=4) {
+	for (size_t j=0; j <= input->clen-4; j+=4) {
 	    VECTYPE data_re = LOADSIMD_UNALIGNED(&input->data_real[i+j]);
 	    VECTYPE data_im = LOADSIMD_UNALIGNED(&input->data_imag[i+j]);
 	    VECTYPE coeff = LOADSIMD(&input->coeff[j]);
@@ -86,19 +88,19 @@ int test2(struct _result *result, const struct _input *input) {
 }
 
 int test3(struct _result *result, const struct _input *input) {
-    int decim=DECIM;
-    int k=0;
-    for (int i=0; i <= input->dlen - input->clen-3*decim+1; i+=3*decim) {
+    size_t decim=DECIM;
+    size_t k=0;
+    for (size_t i=0; i <= input->dlen - input->clen-3*decim+1; i+=3*decim) {
 	VECTYPE res_re0 = {0., 0., 0., 0.}, res_im0 = {0., 0., 0., 0.};
 	VECTYPE res_re1 = {0., 0., 0., 0.}, res_im1 = {0., 0., 0., 0.};
 	VECTYPE res_re2 = {0., 0., 0., 0.}, res_im2 = {0., 0., 0., 0.};
 	//VECTYPE res_re3 = {0., 0., 0., 0.}, res_im3 = {0., 0., 0., 0.}; -- optimize for NEON
 
-	for (int j=0; j<=input->clen-4; j+=4) {
+	for (size_t j=0; j<=input->clen-4; j+=4) {
 	    VECTYPE data;
 	    VECTYPE coeff = LOADSIMD(&input->coeff[j]); // 1 x load coeff
 
-	    int r = i+j;
+	    size_t r = i+j;
 	    data = LOADSIMD(&input->data_real[r]); res_re0 += data * coeff;
 	    data = LOADSIMD(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
@@ -127,9 +129,9 @@ int test3(struct _result *result, const struct _input *input) {
 }
 
 int test4(struct _result *result, const struct _input *input) {
-    int decim=DECIM;
-    int k=0;
-    for (int i=0; i <= input->dlen - input->clen-7*decim+1; i+=7*decim) {
+    size_t decim=DECIM;
+    size_t k=0;
+    for (size_t i=0; i <= input->dlen - input->clen-7*decim+1; i+=7*decim) {
 	VECTYPE res_re0 = {0., 0., 0., 0.}, res_im0 = {0., 0., 0., 0.};
 	VECTYPE res_re1 = {0., 0., 0., 0.}, res_im1 = {0., 0., 0., 0.};
 	VECTYPE res_re2 = {0., 0., 0., 0.}, res_im2 = {0., 0., 0., 0.};
@@ -139,11 +141,11 @@ int test4(struct _result *result, const struct _input *input) {
 	VECTYPE res_re6 = {0., 0., 0., 0.}, res_im6 = {0., 0., 0., 0.};
 	//VECTYPE res_re7 = {0., 0., 0., 0.}, res_im7 = {0., 0., 0., 0.}; -- optimalize for NEON regs
 
-	for (int j=0; j<=input->clen-4; j+=4) {
+	for (size_t j=0; j<=input->clen-4; j+=4) {
 	    VECTYPE data;
 	    VECTYPE coeff = LOADSIMD(&input->coeff[j]); // 1 x load coeff
 
-	    int r = i+j;
+	    size_t r = i+j;
 	    data = LOADSIMD(&input->data_real[r]); res_re0 += data * coeff;
 	    data = LOADSIMD(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
@@ -193,9 +195,9 @@ int test4(struct _result *result, const struct _input *input) {
 }
 
 int test5(struct _result *result, const struct _input *input) {
-    int decim=DECIM;
-    int k = 0;
-    for (int i=0; i <= input->dlen - input->clen-15*decim+1; i+=15*decim) {
+    size_t decim=DECIM;
+    size_t k = 0;
+    for (size_t i=0; i <= input->dlen - input->clen-15*decim+1; i+=15*decim) {
 	VECTYPE res_re0 = {0., 0., 0., 0.}, res_im0 = {0., 0., 0., 0.};
 	VECTYPE res_re1 = {0., 0., 0., 0.}, res_im1 = {0., 0., 0., 0.};
 	VECTYPE res_re2 = {0., 0., 0., 0.}, res_im2 = {0., 0., 0., 0.};
@@ -214,11 +216,11 @@ int test5(struct _result *result, const struct _input *input) {
 	VECTYPE res_re14 = {0., 0., 0., 0.}, res_im14 = {0., 0., 0., 0.};
 	//VECTYPE res_re15 = {0., 0., 0., 0.}, res_im15 = {0., 0., 0., 0.}; -- optimalize for NEON regs
 
-	for (int j=0; j<=input->clen-4; j+=4) {
+	for (size_t j=0; j<=input->clen-4; j+=4) {
 	    VECTYPE data;
 	    VECTYPE coeff = LOADSIMD(&input->coeff[j]); // 1 x load coeff
 
-	    int r = i+j;
+	    size_t r = i+j;
 	    data = LOADSIMD(&input->data_real[r]); res_re0 += data * coeff;
 	    data = LOADSIMD(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
@@ -328,7 +330,7 @@ int test5(struct _result *result, const struct _input *input) {
 int test6(struct _result *result, const struct _input *input) {
     int decim=DECIM;
     int k=0;
-    for (int i=0; i <= input->dlen - input->clen-7*decim+1; i+=7*decim) {
+    for (size_t i=0; i <= input->dlen - input->clen-7*decim+1; i+=7*decim) {
 	AVXTYPE res_re0 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im0 = {0., 0., 0., 0., 0., 0., 0., 0.};
 	AVXTYPE res_re1 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im1 = {0., 0., 0., 0., 0., 0., 0., 0.};
 	AVXTYPE res_re2 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im2 = {0., 0., 0., 0., 0., 0., 0., 0.};
@@ -338,11 +340,11 @@ int test6(struct _result *result, const struct _input *input) {
 	AVXTYPE res_re6 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im6 = {0., 0., 0., 0., 0., 0., 0., 0.};
 	//AVXTYPE res_re7 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im7 = {0., 0., 0., 0., 0., 0., 0., 0.}; -- optimize for AVXregs
 
-	for (int j=0; j<=input->clen-8; j+=8) {
+	for (size_t j=0; j<=input->clen-8; j+=8) {
 	    AVXTYPE data;
 	    AVXTYPE coeff = LOADAVX(&input->coeff[j]); // 1 x load coeff
 
-	    int r = i+j;
+	    size_t r = i+j;
 	    data = LOADAVX(&input->data_real[r]); res_re0 += data * coeff;
 	    data = LOADAVX(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
@@ -396,8 +398,8 @@ int test6(struct _result *result, const struct _input *input) {
 
 int test7(struct _result *result, const struct _input *input) {
     int decim=DECIM;
-    int k=0;
-    for (int i=0; i <= input->dlen - input->clen-15*decim+1; i+=15*decim) {
+    size_t k=0;
+    for (size_t i=0; i <= input->dlen - input->clen-15*decim+1; i+=15*decim) {
 	AVXTYPE res_re0 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im0 = {0., 0., 0., 0., 0., 0., 0., 0.};
 	AVXTYPE res_re1 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im1 = {0., 0., 0., 0., 0., 0., 0., 0.};
 	AVXTYPE res_re2 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im2 = {0., 0., 0., 0., 0., 0., 0., 0.};
@@ -416,11 +418,11 @@ int test7(struct _result *result, const struct _input *input) {
 	AVXTYPE res_re14 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im14 = {0., 0., 0., 0., 0., 0., 0., 0.};
 	//AVXTYPE res_re15 = {0., 0., 0., 0., 0., 0., 0., 0.}, res_im15 = {0., 0., 0., 0., 0., 0., 0., 0.}; -- optimize for AVXregs
 
-	for (int j=0; j<=input->clen-8; j+=8) {
+	for (size_t j=0; j<=input->clen-8; j+=8) {
 	    AVXTYPE data;
 	    AVXTYPE coeff = LOADAVX(&input->coeff[j]); // 1 x load coeff
 
-	    int r=i+j;
+	    size_t r=i+j;
 	    data = LOADAVX(&input->data_real[r]); res_re0 += data * coeff;
 	    data = LOADAVX(&input->data_imag[r]); res_im0 += data * coeff;
 	    r += decim;
