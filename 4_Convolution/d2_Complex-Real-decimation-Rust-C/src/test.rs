@@ -33,12 +33,13 @@ pub fn test_init() -> Input {
     }
 }
 
-pub fn test_check(output: &Output) -> f32 {
+pub fn test_check(output: &Output) -> (usize, f32) {
     let mut res: f32 = 0.;
-    for i in 0..output.data_real.len() {
+    //for i in 0..output.data_real.len() {
+    for i in 0..1_000_000 {
         res += output.data_real[i] + output.data_imag[i];
     }
-    res
+    (output.data_real.len(), res)
 }
 
 #[allow(improper_ctypes)]

@@ -62,14 +62,14 @@ int test1(struct _result *result, const struct _input *input) {
 	result->data_imag[k] = res_im;
 	k++;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 
 int test2(struct _result *result, const struct _input *input) {
     size_t decim=DECIM;
     size_t k=0;
-    for (size_t i=0; i <= input->dlen - input->clen-decim-4+1; i+=decim) {
+    for (size_t i=0; i < input->dlen - input->clen - decim +2; i+=decim) {
 	VECTYPE res_re = {0., 0., 0., 0.};
 	VECTYPE res_im = {0., 0., 0., 0.};
 	for (size_t j=0; j <= input->clen-4; j+=4) {
@@ -83,20 +83,20 @@ int test2(struct _result *result, const struct _input *input) {
 	result->data_imag[k] = res_im[0] + res_im[1] + res_im[2] + res_im[3];
 	k++;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 
 int test3(struct _result *result, const struct _input *input) {
     size_t decim=DECIM;
     size_t k=0;
-    for (size_t i=0; i <= input->dlen - input->clen-3*decim+1; i+=3*decim) {
+    for (size_t i=0; i < input->dlen - input->clen - 3*decim +2; i+=3*decim) {
 	VECTYPE res_re0 = {0., 0., 0., 0.}, res_im0 = {0., 0., 0., 0.};
 	VECTYPE res_re1 = {0., 0., 0., 0.}, res_im1 = {0., 0., 0., 0.};
 	VECTYPE res_re2 = {0., 0., 0., 0.}, res_im2 = {0., 0., 0., 0.};
 	//VECTYPE res_re3 = {0., 0., 0., 0.}, res_im3 = {0., 0., 0., 0.}; -- optimize for NEON
 
-	for (size_t j=0; j<=input->clen-4; j+=4) {
+	for (size_t j=0; j <= input->clen-4; j+=4) {
 	    VECTYPE data;
 	    VECTYPE coeff = LOADSIMD(&input->coeff[j]); // 1 x load coeff
 
@@ -124,7 +124,7 @@ int test3(struct _result *result, const struct _input *input) {
 	//result->data_imag[k+3] = res_im3[0] + res_im3[1] + res_im3[2] + res_im3[3];
 	k+=3;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 
@@ -190,7 +190,7 @@ int test4(struct _result *result, const struct _input *input) {
 	//result->data_imag[k+7] = res_im7[0] + res_im7[1] + res_im7[2] + res_im7[3];
 	k+=7;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 
@@ -311,7 +311,7 @@ int test5(struct _result *result, const struct _input *input) {
 	//result->data_imag[k+15] = res_im15[0] + res_im15[1] + res_im15[2] + res_im15[3];
 	k+=15;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 
@@ -392,7 +392,7 @@ int test6(struct _result *result, const struct _input *input) {
 	//result->data_imag[i+7] = res_im7[0] + res_im7[1] + res_im7[2] + res_im7[3] + res_im7[4] + res_im7[5] + res_im7[6] + res_im7[7];
 	k+=7;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 
@@ -514,7 +514,7 @@ int test7(struct _result *result, const struct _input *input) {
 	//result->data_imag[k+15] = res_im15[0] + res_im15[1] + res_im15[2] + res_im15[3] + res_im15[4] + res_im15[5] + res_im15[6] + res_im15[7];
 	k+=15;
     }
-    result->dlen = input->dlen - input->clen;
+    result->dlen = k;
     return 0;
 }
 #endif

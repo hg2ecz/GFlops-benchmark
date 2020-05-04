@@ -7,9 +7,12 @@ fn testfn(tf: u32, input: &Input, tname: &str) {
     let output = test::test(tf, input);
     let elapsed_time = start_time.elapsed();
 
-    let chk = test::test_check(&output);
+    let (rlen, chk) = test::test_check(&output);
     let msec = elapsed_time.as_secs() * 1000 + elapsed_time.subsec_millis() as u64;
-    println!("{} --> eltime: {} ms, result: {}", tname, msec, chk);
+    println!(
+        "{} --> eltime: {} ms, resultlen: {}, result: {}",
+        tname, msec, rlen, chk
+    );
 }
 
 fn main() {
