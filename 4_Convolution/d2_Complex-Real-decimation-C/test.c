@@ -113,7 +113,7 @@ int test3(struct _result *result, const struct _input *input) {
 	    //data = LOADSIMD(&input->data_real[r]); res_re3 += data * coeff;
 	    //data = LOADSIMD(&input->data_imag[r]); res_im3 += data * coeff;
 	}
-	result->data_real[k]   = res_re0[0] + res_re0[1] + res_re1[2] + res_re0[3];
+	result->data_real[k]   = res_re0[0] + res_re0[1] + res_re0[2] + res_re0[3];
 	result->data_real[k+1] = res_re1[0] + res_re1[1] + res_re1[2] + res_re1[3];
 	result->data_real[k+2] = res_re2[0] + res_re2[1] + res_re2[2] + res_re2[3];
 	//result->data_real[k+3] = res_re3[0] + res_re3[1] + res_re3[2] + res_re3[3];
